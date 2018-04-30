@@ -1,6 +1,9 @@
+/**
+ * Simple WebGL Light.
+ */
 class WebGLLight {
   /**
-   * 
+   * Setup a new WebGL light.
    * @param {*} ambient 
    * @param {*} diffuse 
    * @param {*} specular 
@@ -15,6 +18,10 @@ class WebGLLight {
     this.isOn = isOn;
   }
 
+  /**
+   * Setup the light for the given WebGL program.
+   * @param {WegGLProgram} glProgram 
+   */
   show(glProgram) {
     gl.uniform1i(gl.getUniformLocation(glProgram, "light1"), this.isOn);
     gl.uniform3fv(gl.getUniformLocation(glProgram, "lightAmbient1"), flatten(this.ambient));

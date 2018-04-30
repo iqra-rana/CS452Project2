@@ -1,6 +1,9 @@
+/**
+ * Simple WebGL Camera.
+ */
 class WebGlCamera {
   /**
-   * 
+   * Create a new WebGL camera using perspective projection.
    * @param {*} eye 
    * @param {*} lookAt 
    * @param {*} upVector 
@@ -26,6 +29,9 @@ class WebGlCamera {
     this.PPersp = this._calcPPersp();
   }
 
+  /**
+   * Calculate the ModelView matrix.
+   */
   _calcM() {
     return [
       this.u[0], this.v[0], this.n[0], 0.0,
@@ -38,6 +44,9 @@ class WebGlCamera {
     ];
   }
 
+  /**
+   * Calculate the ModelView Inverse Transpose matrix.
+   */
   _calcMInvTrans() {
     return [
       this.u[0], this.u[1], this.u[2], 0.0,
@@ -47,6 +56,9 @@ class WebGlCamera {
     ];
   }
 
+  /**
+   * Calculate the perspective projection matrix.
+   */
   _calcPPersp() {
     return [(2 * this.projection.near) / (this.projection.right - this.projection.left), 0.0, 0.0, 0.0,
       0.0, (2 * this.projection.near) / (this.projection.top - this.projection.bottom), 0.0, 0.0,

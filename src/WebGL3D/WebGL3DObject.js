@@ -1,6 +1,9 @@
+/**
+ * WebGL 3D Object with camera and lighting.
+ */
 class WebGL3DObject {
   /**
-   * 
+   * Create a new WebGL 3D object.
    * @param {WebGLProgram} glProgram 
    * @param {ObjectParams} objParams 
    * @param {WebGLCamera} camera
@@ -36,6 +39,10 @@ class WebGL3DObject {
     gl.enableVertexAttribArray(this.vertexPosition);
   }
 
+  /**
+   * Draw the 3D object using the camera and lights.
+   * @param {WebGLLight[]} lights 
+   */
   draw(lights) {
     gl.useProgram(this.program);
     gl.uniformMatrix4fv(this.MUniform, false, flatten(this.camera.M));
@@ -64,6 +71,12 @@ class WebGL3DObject {
     gl.drawElements(gl.TRIANGLES, 3 * this.object.numTriangles, gl.UNSIGNED_SHORT, 0);
   }
 
+  /**
+   * Get the face normals for the object.
+   * @param {*} vertices 
+   * @param {*} indexList 
+   * @param {*} numTriangles 
+   */
   _getFaceNormals(vertices, indexList, numTriangles) {
     // array of face normals
     var faceNormals = [];
@@ -105,6 +118,14 @@ class WebGL3DObject {
     return faceNormals;
   }
 
+  /**
+   * Get the vertex normals for the object.
+   * @param {*} vertices 
+   * @param {*} indexList 
+   * @param {*} faceNormals 
+   * @param {*} numVertices 
+   * @param {*} numTriangles 
+   */
   _getVertexNormals(vertices, indexList, faceNormals, numVertices, numTriangles) {
     var vertexNormals = [];
     // Iterate over all vertices
