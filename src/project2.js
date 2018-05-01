@@ -1,7 +1,5 @@
-// Name: Iqra Rana
-// Date: 4/10/2018
-
-// Jackson DeMeyers 4/30/2018
+// Iqra Rana, 4/10/2018
+// Jackson DeMeyers, 4/30/2018
 
 let gl;
 
@@ -10,6 +8,7 @@ let chair2;
 let camera;
 let lights;
 
+// chair constants
 const CHAIR_VERTICES_NUM = 2440;
 const CHAIR_TRIANGLES_NUM = 4871;
 const CHAIR_INDEXLIST = getFaces();
@@ -23,16 +22,19 @@ const DIFFUSE = vec3(0.5, 0.9, 0.36);
 const SHININESS = 20.0;
 const SPECULAR = vec3(0.8, 0.8, 0.8);
 
+// light 1 constants
 const LIGHT_1_POS = vec3(0.0, 0.0, 0.6);
 const LIGHT_1_AMB = vec3(0.1, 0.1, 0.1);
 const LIGHT_1_DIFF = vec3(0.8, 0.8, 0.8);
 const LIGHT_1_SPEC = vec3(0.8, 0.8, 0.8);
 
+// light 2 constants
 const LIGHT_2_POS = vec3(0.1, 0.0, 0.0);
 const LIGHT_2_AMB = vec3(0.2, 0.2, 0.2);
 const LIGHT_2_DIFF = vec3(1.0, 1.0, 0.6);
 const LIGHT_2_SPEC = vec3(1.0, 0.77, 1.0);
 
+// camera constants
 const PROJ_LEFT = -100.0; //-40
 const PROJ_RIGHT = 100.0; //40
 const PROJ_TOP = 110.0; //60
@@ -40,6 +42,10 @@ const PROJ_BOTTOM = -110.0; //-40
 const PROJ_NEAR = 60.0; //60
 const PROJ_FAR = 195.0; //195
 
+/**
+ * Setup the WebGL viewport and create the objects for the scene.
+ * Calls render(). Used on onload on html body (entry point).
+ */
 function initGL() {
     var canvas = document.getElementById("gl-canvas");
 
@@ -70,6 +76,9 @@ function initGL() {
     render();
 }
 
+/**
+ * Render all objects, lights, camera, etc... using RAF.
+ */
 function render() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
