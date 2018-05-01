@@ -50,12 +50,9 @@ class WebGL3DObject {
     gl.uniformMatrix4fv(this.MUniform, false, flatten(this.camera.M));
     gl.uniformMatrix4fv(this.projection_persp, false, flatten(this.camera.PPersp));
 
-    const faceNormals = this.object.getFaceNormals();
-    const vertexNormals = this.object.getVertexNormals(faceNormals);
-
     const normalsBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, normalsBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(vertexNormals), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(this.object.vertexNormals), gl.STATIC_DRAW);
 
     gl.vertexAttribPointer(this.vertexNormal, 3, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(this.vertexNormal);

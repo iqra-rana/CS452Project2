@@ -11,9 +11,16 @@ class ObjectParams {
     this.vertices = vertices;
     this.numVertices = vertices.length;
     this.indexList = indexList;
+
+    this.faceNormals = this._getFaceNormals();
+    this.vertexNormals = this._getVertexNormals();
   }
 
-  getFaceNormals() {
+  /**
+   * Return the face normals for the object detailed by this
+   * objects properties.
+   */
+  _getFaceNormals() {
     // array of face normals
     var faceNormals = [];
     var faceNormal = [];
@@ -54,7 +61,11 @@ class ObjectParams {
     return faceNormals;
   }
 
-  getVertexNormals(faceNormals) {
+  /**
+   * Return the vertex normals for the object detailed by this
+   * objects properties.
+   */
+  _getVertexNormals() {
     var vertexNormals = [];
     // Iterate over all vertices
     for (var j = 0; j < this.numVertices; j++) {
@@ -68,7 +79,7 @@ class ObjectParams {
         // if the j-th vertex belongs to the i-th face
         if (j == this.indexList[3 * i] || j == this.indexList[3 * i + 1] || j == this.indexList[3 * i + 2]) { // NEEDS CODE IN PARENTHESES
           // Update the vertex normal (NEEDS CODE)
-          vertexNormal = add(vertexNormal, faceNormals[i]); //?
+          vertexNormal = add(vertexNormal, this.faceNormals[i]); //?
         }
       }
       // Normalize the vertex normal here (NEEDS CODE)
