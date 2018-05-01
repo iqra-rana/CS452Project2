@@ -1,15 +1,17 @@
 /**
- * WebGL 3D Object with camera and lighting.
+ * WebGL 3D Object with a textures, transformation controls, a camera and lighting.
+ * Render the shape through the camera using the lookat approach and perspective 
+ * projection.
  */
 class WebGL3DObject {
   /**
    * Create a new WebGL 3D object.
-   * @param {WebGLProgram} glProgram 
-   * @param {ObjectParams} objParams 
-   * @param {WebGLCamera} camera
-   * @param {LightingParams} lightParams
-   * @param {TextureParams} texParams 
-   * @param {ControlParams} controlParams 
+   * @param {WebGLProgram} glProgram The program configured to render.
+   * @param {ObjectParams} objParams Required object parameters to render the object.
+   * @param {WebGLCamera} camera The WebGLCamera object configured to render the scene.
+   * @param {LightingParams} lightParams The lighting parameters for the object.
+   * @param {TextureParams} texParams Optional texture parameters for the object.
+   * @param {ControlParams} controlParams Optional paremeters to allow for transformations using keys.
    */
   constructor(glProgram, objParams, camera, lightParams, texParams, controlParams) {
     this.program = glProgram;
@@ -41,19 +43,16 @@ class WebGL3DObject {
 
   /**
    * Draw the 3D object using the camera and lights.
-   * @param {WebGLLight[]} lights 
+   * @param {WebGLLight[]} lights An array of WebGLLight objects to be used in drawing the object.
    */
   draw(lights) {
     gl.useProgram(this.program);
     gl.uniformMatrix4fv(this.MUniform, false, flatten(this.camera.M));
     gl.uniformMatrix4fv(this.projection_persp, false, flatten(this.camera.PPersp));
 
-    const faceNormals = this._getFaceNormals(this.object.vertices, this.object.indexList, this.object.numTriangles);
-    const vertexNormals = this._getVertexNormals(this.object.vertices, this.object.indexList, faceNormals, this.object.numVertices, this.object.numTriangles);
-
     const normalsBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, normalsBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(vertexNormals), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(this.object.vertexNormals), gl.STATIC_DRAW);
 
     gl.vertexAttribPointer(this.vertexNormal, 3, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(this.vertexNormal);
@@ -69,86 +68,5 @@ class WebGL3DObject {
 
     gl.uniformMatrix4fv(this.MInvTransUniform, false, flatten(this.camera.MInvTrans));
     gl.drawElements(gl.TRIANGLES, 3 * this.object.numTriangles, gl.UNSIGNED_SHORT, 0);
-  }
-
-  /**
-   * Get the face normals for the object.
-   * @param {*} vertices 
-   * @param {*} indexList 
-   * @param {*} numTriangles 
-   */
-  _getFaceNormals(vertices, indexList, numTriangles) {
-    // array of face normals
-    var faceNormals = [];
-    var faceNormal = [];
-
-    // Following lines iterate over triangles
-    for (var i = 0; i < numTriangles; i++) {
-      // Following lines give you three vertices for each face of the triangle
-      var p0 = vec3(vertices[indexList[3 * i]][0],
-        vertices[indexList[3 * i]][1],
-        vertices[indexList[3 * i]][2]);
-
-      var p1 = vec3(vertices[indexList[3 * i + 1]][0],
-        vertices[indexList[3 * i + 1]][1],
-        vertices[indexList[3 * i + 1]][2]);
-
-      var p2 = vec3(vertices[indexList[3 * i + 2]][0],
-        vertices[indexList[3 * i + 2]][1],
-        vertices[indexList[3 * i + 2]][2]);
-
-      // Calculate vector from p0 to p1 ( use subtract function in MV.js, NEEDS CODE )
-      var p01 = subtract(p1, p0); //p1-p0
-
-      // Calculate vector from p0 to p2 ( use subtract function, NEEDS CODE )
-      var p02 = subtract(p2, p0); //p2-p0
-
-      // Calculate face normal as the cross product of the above two vectors
-      // (use cross function in MV.js, NEEDS CODE )
-      faceNormal = cross(p01, p02);
-
-      // normalize face normal (use normalize function in MV.js, NEEDS CODE)
-      faceNormal = normalize(faceNormal, 0);
-
-      // Following line pushes the face normal into the array of face normals
-      faceNormals.push(faceNormal);
-    }
-
-    // Following line returns the array of face normals
-    return faceNormals;
-  }
-
-  /**
-   * Get the vertex normals for the object.
-   * @param {*} vertices 
-   * @param {*} indexList 
-   * @param {*} faceNormals 
-   * @param {*} numVertices 
-   * @param {*} numTriangles 
-   */
-  _getVertexNormals(vertices, indexList, faceNormals, numVertices, numTriangles) {
-    var vertexNormals = [];
-    // Iterate over all vertices
-    for (var j = 0; j < numVertices; j++) {
-      // Initialize the vertex normal for the j-th vertex
-      var vertexNormal = vec3(0.0, 0.0, 0.0);
-
-      // Iterate over all the faces to find if this vertex belongs to
-      // a particular face        
-      for (var i = 0; i < numTriangles; i++) {
-        // The condition of the following if statement should check
-        // if the j-th vertex belongs to the i-th face
-        if (j == indexList[3 * i] || j == indexList[3 * i + 1] || j == indexList[3 * i + 2]) { // NEEDS CODE IN PARENTHESES
-          // Update the vertex normal (NEEDS CODE)
-          vertexNormal = add(vertexNormal, faceNormals[i]); //?
-        }
-      }
-      // Normalize the vertex normal here (NEEDS CODE)
-      vertexNormal = normalize(vertexNormal);
-
-      // Following line pushes the vertex normal into the vertexNormals array
-      vertexNormals.push(vertexNormal);
-    }
-    return vertexNormals;
   }
 }

@@ -1,13 +1,15 @@
 /**
- * Simple WebGL Camera.
+ * Simple WebGL Camera using the lookat approach and perspective projection.
+ * Provide access to ModelView matrix (M), ModelView Inverse Transpose matrix
+ * (MInvTrans), and the perspective projection matrix (PPersp).
  */
 class WebGlCamera {
   /**
-   * Create a new WebGL camera using perspective projection.
-   * @param {*} eye 
-   * @param {*} lookAt 
-   * @param {*} upVector 
-   * @param {projectionParams} projectionParams 
+   * Create a new WebGL camera using the lookat approach and perspective projection.
+   * @param {vec3} eye Location of the "eye" of the camera represented as a WebGL vec3.
+   * @param {vec3} lookAt Location of the "look at" point of the scene, represented as a WebGL vec3.
+   * @param {vec3} upVector The positive y-axis unit vector of the scene represented as a WebGL vec3.
+   * @param {projectionParams} projectionParams Perspective projection parameters object (light, right, top, bottom, etc...).
    */
   constructor(eye, lookAt, upVector, projectionParams) {
     this.e = eye;
