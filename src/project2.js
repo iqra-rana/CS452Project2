@@ -7,13 +7,18 @@ let gl;
 
 let chair1;
 let chair2;
+let table;
 let camera;
 let lights;
 
 const CHAIR_VERTICES_NUM = 2440;
 const CHAIR_TRIANGLES_NUM = 4871;
+const TABLE_VERTICES_NUM = 8;
+const TABLE_TRIANGLES_NUM = 12;
 const CHAIR_INDEXLIST = getFaces();
 const CHAIR_VERTICES = getVertices();
+const TABLE_INDEXLIST = getTableFaces();
+const TABLE_VERTICES = getTableVertices();
 const CAMERA_EYE = vec3(30.0, 80.0, 130.0);
 const CAMERA_LOOK_AT = vec3(0.0, 0.0, 0.0);
 const CAMERA_V_UP = vec3(0.0, 1.0, 0.0);
@@ -61,11 +66,15 @@ function initGL() {
 
     // create chairs
     const chairObjParams = new ObjectParams(CHAIR_TRIANGLES_NUM, CHAIR_VERTICES, CHAIR_INDEXLIST);
+	const tableObjParams = new ObjectParams(TABLE_TRIANGLES_NUM, TABLE_VERTICES, TABLE_INDEXLIST);
     const chairLightParams = new LightingParams(AMBIENT, DIFFUSE, SPECULAR, SHININESS);
+	const tableLightParams = new LightingParams(AMBIENT, DIFFUSE, SPECULAR, SHININESS);
     const chair1Program = initShaders(gl, "vertex-shader", "fragment-shader");
     const chair2Program = initShaders(gl, "vertex-shaderChair2", "fragment-shaderChair2");
+	const tableProgram = initShaders(gl, "vertex-shaderTable", "fragment-shader");
     chair1 = new WebGL3DObject(chair1Program, chairObjParams, camera, chairLightParams, null, null);
     chair2 = new WebGL3DObject(chair2Program, chairObjParams, camera, chairLightParams, null, null);
+	//table = new WebGL3DObject(tableProgram, tableObjParams, camera, tableLightParams, null, null);
 
     render();
 }
@@ -75,6 +84,7 @@ function render() {
 
     chair1.draw(lights);
     chair2.draw(lights);
+	//table.draw(lights);
 
     requestAnimFrame(render);
 };
