@@ -57,6 +57,17 @@ class WebGL3DObject {
     gl.vertexAttribPointer(this.vertexNormal, 3, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(this.vertexNormal);
 
+    const indexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.object.indexList), gl.STATIC_DRAW);
+
+    const verticesBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, verticesBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(this.object.vertices), gl.STATIC_DRAW);
+
+    gl.vertexAttribPointer(this.vertexPosition, 4, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(this.vertexPosition);
+
     gl.uniform3fv(gl.getUniformLocation(this.program, "ambient"), flatten(this.light.ambient));
     gl.uniform3fv(gl.getUniformLocation(this.program, "diffuse"), flatten(this.light.diffuse));
     gl.uniform3fv(gl.getUniformLocation(this.program, "specular"), flatten(this.light.specular));
