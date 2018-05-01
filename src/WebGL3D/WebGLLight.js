@@ -1,14 +1,16 @@
 /**
  * Simple WebGL Light.
+ * Sends ambient, diffuse, specular, and position data to the the gpu to render in 
+ * the shaders.
  */
 class WebGLLight {
   /**
    * Setup a new WebGL light.
-   * @param {*} ambient 
-   * @param {*} diffuse 
-   * @param {*} specular 
-   * @param {*} position 
-   * @param {boolean} isOn 
+   * @param {vec3} ambient Ambient reflection values represented as a WebGL vec3.
+   * @param {vec3} diffuse Diffuse reflection values represented as a WebGL vec3.
+   * @param {vec3} specular Specular reflection values represented as a WebGL vec3.
+   * @param {vec3} position Light position represented was a WebGL vec3.
+   * @param {boolean} isOn Whether the light is illuminated (true = on, false = off).
    */
   constructor(ambient, diffuse, specular, position, isOn) {
     this.ambient = ambient;
@@ -19,8 +21,8 @@ class WebGLLight {
   }
 
   /**
-   * Setup the light for the given WebGL program.
-   * @param {WegGLProgram} glProgram 
+   * Setup a light for the given WebGL program.
+   * @param {WegGLProgram} glProgram Program in which to use the light for use with a 3D object.
    */
   show(glProgram) {
     gl.uniform1i(gl.getUniformLocation(glProgram, "light1"), this.isOn);
@@ -28,6 +30,5 @@ class WebGLLight {
     gl.uniform3fv(gl.getUniformLocation(glProgram, "lightDiffuse1"), flatten(this.diffuse));
     gl.uniform3fv(gl.getUniformLocation(glProgram, "lightSpecular1"), flatten(this.specular));
     gl.uniform3fv(gl.getUniformLocation(glProgram, "lightPosition1"), flatten(this.position));
-
   }
 }
