@@ -11,8 +11,8 @@ let lights;
 
 // objects constants
 const CHAIR_TRIANGLES_NUM = 4871;
-const CHAIR_INDEXLIST = getFaces();
-const CHAIR_VERTICES = getVertices();
+const CHAIR_INDEXLIST = getChairFaces();
+const CHAIR_VERTICES = getChairVertices();
 
 const TABLE_TRIANGLES_NUM = 12;
 const TABLE_INDEXLIST = getTableFaces();
@@ -36,12 +36,12 @@ const LIGHT_2_DIFF = vec3(1.0, 1.0, 0.6);
 const LIGHT_2_SPEC = vec3(1.0, 0.77, 1.0);
 
 // camera constants
-const PROJ_LEFT = -100.0; //-40
-const PROJ_RIGHT = 100.0; //40
-const PROJ_TOP = 110.0; //60
-const PROJ_BOTTOM = -110.0; //-40
-const PROJ_NEAR = 60.0; //60
-const PROJ_FAR = 195.0; //195
+const PROJ_LEFT = -100.0;
+const PROJ_RIGHT = 100.0;
+const PROJ_TOP = 110.0;
+const PROJ_BOTTOM = -110.0; 
+const PROJ_NEAR = 100.0;
+const PROJ_FAR = 250.0;
 
 const CAMERA_EYE = vec3(30.0, 80.0, 130.0);
 const CAMERA_LOOK_AT = vec3(0.0, 0.0, 0.0);

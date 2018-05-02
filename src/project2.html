@@ -222,18 +222,12 @@
 					
 					
 					// *** End of Gouraud shading ***
-					
-					trans = mat4
-					(1, 0, 0, 0,
-					 0, 1, 0, 0,
-					 0, 0, 1, 0,
-					 -100, 100, 0, 1);
 					 
-					/*var transTranspose = mat4 
-					(1, 0, 0, -100,
-					0, 1, 0, 100,
-					0, 0, 0, 0,
-					0, 0, 0, 1);*/
+					trans = mat4 
+					(1, 0, 0, 0,
+					0, 1, 0, 0,
+					0, 0, 1, 0,
+					-100, 0, 0, 1);
 					
 					rot_y = mat4 
 					(cos(-5.0), 0, -sin(-5.0), 0,
@@ -244,7 +238,7 @@
 					// EVEN IF YOU ARE NOT WORKING ON THE SECOND ITERATION,
 					// YOU MUST APPLY THE MODEL VIEW AND PROJECTION
 					// MATRICES TO vertexPosition TO GET gl_Position!*/
-					gl_Position = projection_persp * M * trans * vertexPosition; 
+					gl_Position = projection_persp * M * trans * rot_y * vertexPosition; 
 				}
 
 		</script>
@@ -470,23 +464,23 @@
 					(1, 0, 0, 0,
 					 0, 1, 0, 0,
 					 0, 0, 1, 0,
-					 100, 100, 0, 1);
+					 70, 0, -30, 1);
 					
 					rot_y = mat4 
-					(cos(5.0), 0, -sin(5.0), 0,
+					(cos(-0.5), 0, -sin(-0.5), 0,
 					 0, 1, 0, 0,
-					 sin(5.0), 0, cos(5.0), 0,
+					 sin(-0.5), 0, cos(-0.5), 0,
 					 0, 0, 0, 1);
 					
 					// EVEN IF YOU ARE NOT WORKING ON THE SECOND ITERATION,
 					// YOU MUST APPLY THE MODEL VIEW AND PROJECTION
 					// MATRICES TO vertexPosition TO GET gl_Position!*/
-					gl_Position = projection_persp * M * vertexPosition; 
+					gl_Position = projection_persp * M * trans * rot_y * vertexPosition; 
 				}
 
 		</script>
-		
-		<script id="vertex-shaderTable" type="x-shader/x-vertex">
+
+	<script id="vertex-shaderTable" type="x-shader/x-vertex">
 
 				// INSERT CODE HERE
 				// Step 3.2: Lighting Calculations in Vertex Shader
@@ -702,7 +696,7 @@
 					(1, 0, 0, 0,
 					 0, 1, 0, 0,
 					 0, 0, 1, 0,
-					 100, -100, 0, 1);
+					 -10, 0, -30, 1);
 					/*
 					rot_y = mat4 
 					(cos(5.0), 0, -sin(5.0), 0,
@@ -900,8 +894,8 @@
 			}
 
 		</script>
-		
-		<script id="fragment-shaderTable" type="x-shader/x-fragment">
+
+	<script id="fragment-shaderTable" type="x-shader/x-fragment">
 			precision mediump float;
 			varying vec4 fragmentColor;
 			
@@ -915,7 +909,8 @@
 	<script type="text/javascript" src="../Common/initShaders.js"></script>
 	<script type="text/javascript" src="../Common/MV.js"></script>
 
-	<script type="text/javascript" src="./object.js"></script>
+	<script type="text/javascript" src="./objects/chair.js"></script>
+	<script type="text/javascript" src="./objects/cube.js"></script>
 
 	<script type="text/javascript" src="./WebGL3D/params/ControlParams.js"></script>
 	<script type="text/javascript" src="./WebGL3D/params/TextureParams.js"></script>
