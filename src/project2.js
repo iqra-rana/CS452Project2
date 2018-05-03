@@ -71,8 +71,8 @@ function initGL() {
     camera = new WebGlCamera(CAMERA_EYE, CAMERA_LOOK_AT, CAMERA_V_UP, projectionParams);
 
     // create lights
-    const light1 = new WebGLLight(LIGHT_1_AMB, LIGHT_1_DIFF, LIGHT_1_SPEC, LIGHT_1_POS, true);
-    const light2 = new WebGLLight(LIGHT_2_AMB, LIGHT_2_DIFF, LIGHT_2_SPEC, LIGHT_2_POS, true);
+    const light1 = new WebGLLight(LIGHT_1_AMB, LIGHT_1_DIFF, LIGHT_1_SPEC, LIGHT_1_POS, 1);
+    const light2 = new WebGLLight(LIGHT_2_AMB, LIGHT_2_DIFF, LIGHT_2_SPEC, LIGHT_2_POS, 2);
     lights = [light1, light2];
 
     // create objects
