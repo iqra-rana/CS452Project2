@@ -6,6 +6,7 @@ let gl;
 let chair1;
 let chair2;
 let table;
+let crystal;
 let camera;
 let lights;
 
@@ -17,6 +18,10 @@ const CHAIR_VERTICES = getChairVertices();
 const TABLE_TRIANGLES_NUM = 12;
 const TABLE_INDEXLIST = getTableFaces();
 const TABLE_VERTICES = getTableVertices();
+
+const CRYSTAL_TRIANGLES_NUM = 4;
+const CRYSTAL_INDEXLIST = getTetrahedronFaces();
+const CRYSTAL_VERTICES = getTetrahedronVertices();
 
 const AMBIENT = vec3(0.5, 0.77, 0.6);
 const DIFFUSE = vec3(0.5, 0.9, 0.36);
@@ -73,16 +78,19 @@ function initGL() {
     // create objects
     const chairObjParams = new ObjectParams(CHAIR_TRIANGLES_NUM, CHAIR_VERTICES, CHAIR_INDEXLIST);
     const tableObjParams = new ObjectParams(TABLE_TRIANGLES_NUM, TABLE_VERTICES, TABLE_INDEXLIST);
+	const crystalObjParams = new ObjectParams(CRYSTAL_TRIANGLES_NUM, CRYSTAL_VERTICES, CRYSTAL_INDEXLIST);
 
     const lightParams = new LightingParams(AMBIENT, DIFFUSE, SPECULAR, SHININESS);
 
-    const chair1Program = initShaders(gl, "vertex-shader", "fragment-shader");
-    const chair2Program = initShaders(gl, "vertex-shaderChair2", "fragment-shaderChair2");
-    const tableProgram = initShaders(gl, "vertex-shaderTable", "fragment-shaderTable");
+    const chair1Program = initShaders(gl, "vShaderChair", "fShader");
+    const chair2Program = initShaders(gl, "vShaderChair2", "fShader");
+    const tableProgram = initShaders(gl, "vShaderTable", "fShader");
+	const crystalProgram = initShaders(gl, "vShaderCrystal", "fShader");
 
     chair1 = new WebGL3DObject(chair1Program, chairObjParams, camera, lightParams, null, null);
     chair2 = new WebGL3DObject(chair2Program, chairObjParams, camera, lightParams, null, null);
     table = new WebGL3DObject(tableProgram, tableObjParams, camera, lightParams, null, null);
+	crystal = new WebGL3DObject(crystalProgram, crystalObjParams, camera, lightParams, null, null);
 
     // begin rendering 
     render();
@@ -97,6 +105,7 @@ function render() {
     chair1.draw(lights);
     chair2.draw(lights);
     table.draw(lights);
+	crystal.draw(lights);
 
     requestAnimFrame(render);
 };
