@@ -10,48 +10,6 @@ let crystal;
 let camera;
 let lights;
 
-// objects constants
-const CHAIR_TRIANGLES_NUM = 4871;
-const CHAIR_INDEXLIST = getChairFaces();
-const CHAIR_VERTICES = getChairVertices();
-
-const TABLE_TRIANGLES_NUM = 12;
-const TABLE_INDEXLIST = getTableFaces();
-const TABLE_VERTICES = getTableVertices();
-
-const CRYSTAL_TRIANGLES_NUM = 4;
-const CRYSTAL_INDEXLIST = getTetrahedronFaces();
-const CRYSTAL_VERTICES = getTetrahedronVertices();
-
-const AMBIENT = vec3(0.5, 0.77, 0.6);
-const DIFFUSE = vec3(0.5, 0.9, 0.36);
-const SHININESS = 20.0;
-const SPECULAR = vec3(0.8, 0.8, 0.8);
-
-// light 1 constants
-const LIGHT_1_POS = vec3(0.0, 0.0, 0.6);
-const LIGHT_1_AMB = vec3(0.1, 0.1, 0.1);
-const LIGHT_1_DIFF = vec3(0.8, 0.8, 0.8);
-const LIGHT_1_SPEC = vec3(0.8, 0.8, 0.8);
-
-// light 2 constants
-const LIGHT_2_POS = vec3(0.1, 0.0, 0.0);
-const LIGHT_2_AMB = vec3(0.2, 0.2, 0.2);
-const LIGHT_2_DIFF = vec3(1.0, 1.0, 0.6);
-const LIGHT_2_SPEC = vec3(1.0, 0.77, 1.0);
-
-// camera constants
-const PROJ_LEFT = -100.0;
-const PROJ_RIGHT = 100.0;
-const PROJ_TOP = 110.0;
-const PROJ_BOTTOM = -110.0; 
-const PROJ_NEAR = 100.0;
-const PROJ_FAR = 250.0;
-
-const CAMERA_EYE = vec3(30.0, 80.0, 130.0);
-const CAMERA_LOOK_AT = vec3(0.0, 0.0, 0.0);
-const CAMERA_V_UP = vec3(0.0, 1.0, 0.0);
-
 /**
  * Setup the WebGL viewport and create the objects for the scene.
  * Calls render(). Used on onload on html body (entry point).
@@ -75,22 +33,25 @@ function initGL() {
     const light2 = new WebGLLight(LIGHT_2_AMB, LIGHT_2_DIFF, LIGHT_2_SPEC, LIGHT_2_POS, 2);
     lights = [light1, light2];
 
+    // create shader program
+    const program = initShaders(gl, "vShaderChair", "fShader");
+
     // create objects
     const chairObjParams = new ObjectParams(CHAIR_TRIANGLES_NUM, CHAIR_VERTICES, CHAIR_INDEXLIST);
     const tableObjParams = new ObjectParams(TABLE_TRIANGLES_NUM, TABLE_VERTICES, TABLE_INDEXLIST);
-	const crystalObjParams = new ObjectParams(CRYSTAL_TRIANGLES_NUM, CRYSTAL_VERTICES, CRYSTAL_INDEXLIST);
+    const crystalObjParams = new ObjectParams(CRYSTAL_TRIANGLES_NUM, CRYSTAL_VERTICES, CRYSTAL_INDEXLIST);
+    
+    const chair1TransParams = new TransformationParams(-100, 0, 0, 0, -5, 0);
+    const chair2TransParams = new TransformationParams(70, 0, -30, 0, -.5, 0);
+    const tableTransParams = new TransformationParams(-10, 0, -30, 0, 0, 0);
+    const crystalTransParams = new TransformationParams(-10, 50, -30, 0, 0, 0);
 
     const lightParams = new LightingParams(AMBIENT, DIFFUSE, SPECULAR, SHININESS);
 
-    const chair1Program = initShaders(gl, "vShaderChair", "fShader");
-    const chair2Program = initShaders(gl, "vShaderChair2", "fShader");
-    const tableProgram = initShaders(gl, "vShaderTable", "fShader");
-	const crystalProgram = initShaders(gl, "vShaderCrystal", "fShader");
-
-    chair1 = new WebGL3DObject(chair1Program, chairObjParams, camera, lightParams, null, null);
-    chair2 = new WebGL3DObject(chair2Program, chairObjParams, camera, lightParams, null, null);
-    table = new WebGL3DObject(tableProgram, tableObjParams, camera, lightParams, null, null);
-	crystal = new WebGL3DObject(crystalProgram, crystalObjParams, camera, lightParams, null, null);
+    chair1 = new WebGL3DObject(program, chairObjParams, chair1TransParams, camera, lightParams, null, null);
+    chair2 = new WebGL3DObject(program, chairObjParams, chair2TransParams, camera, lightParams, null, null);
+    table = new WebGL3DObject(program, tableObjParams, tableTransParams, camera, lightParams, null, null);
+	crystal = new WebGL3DObject(program, crystalObjParams, crystalTransParams, camera, lightParams, null, null);
 
     // begin rendering 
     render();

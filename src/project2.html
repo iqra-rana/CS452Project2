@@ -4,7 +4,7 @@
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-	<title>Viewing and Lighting</title>
+	<title>Project 2</title>
 
 	<script id="vShaderChair" type="x-shader/x-vertex">
 		precision mediump float;
@@ -18,8 +18,10 @@
 		uniform vec3 ambient, diffuse, specular;
 		uniform float shininess;
 		
-		mat4 trans;
-		mat4 rot_y;
+		uniform mat4 trans;
+		uniform mat4 rot_x;
+		uniform mat4 rot_y;
+		uniform mat4 rot_z;
 		
 		uniform vec3 lightPosition1, lightAmbient1, lightDiffuse1, lightSpecular1;
 		uniform vec3 lightPosition2, lightAmbient2, lightDiffuse2, lightSpecular2;
@@ -98,331 +100,7 @@
 			
 			R = clamp(Ra1+Rd1+Rs1 + Ra2+Rd2+Rs2, 0.0, 1.0);
 			
-			trans = mat4
-				(1, 0, 0, 0,
-				0, 1, 0, 0,
-				0, 0, 1, 0,
-				-100, 0, 0, 1);
-			
-			rot_y = mat4 
-				(cos(-5.0), 0, -sin(-5.0), 0,
-				0, 1, 0, 0,
-				sin(-5.0), 0, cos(-5.0), 0,
-				0, 0, 0, 1);
-			
-			gl_Position = projection_persp * M * trans * rot_y * vertexPosition; 
-		}
-	</script>
-
-	<script id="vShaderChair2" type="x-shader/x-vertex">
-		precision mediump float;
-		attribute vec4 vertexPosition;
-		attribute vec3 vertexNormal;
-		
-		uniform mat4 M;
-		uniform mat4 M_inv_transpose;
-		uniform mat4 projection_persp;				
-		
-		uniform vec3 ambient, diffuse, specular;
-		uniform float shininess;
-		
-		mat4 trans;
-		mat4 rot_y;
-		
-		uniform vec3 lightPosition1, lightAmbient1, lightDiffuse1, lightSpecular1;
-		uniform vec3 lightPosition2, lightAmbient2, lightDiffuse2, lightSpecular2;
-		uniform bool light1, light2;
-
-		varying vec3 R;
-		
-		void main() {
-			gl_PointSize = 1.0;
-			
-			vec3 pos = (M * vertexPosition).xyz;
-
-			vec4 vertexNormal4 = vec4(vertexNormal.x, vertexNormal.y, vertexNormal.z, 1.0);
-			vec3 pos1 = (M_inv_transpose * vertexNormal4).xyz;
-			
-			vec3 Ia_pp0, Id_pp0, Is_pp0;
-			float distance = length(vertexPosition.xyz - lightPosition1);
-			
-			Ia_pp0 = lightAmbient1 / (distance*distance);
-			Id_pp0 = lightDiffuse1 / (distance*distance);
-			Is_pp0 = lightSpecular1 / (distance*distance);
-			
-			vec3 Ia_pp02, Id_pp02, Is_pp02;
-			float distance2 = length(vertexPosition.xyz - lightPosition2);
-			
-			Ia_pp02 = lightAmbient2 / (distance2*distance2);
-			Id_pp02 = lightDiffuse2 / (distance2*distance2);
-			Is_pp02 = lightSpecular2 / (distance2*distance2);
-			
-			vec3 i1 = normalize(lightPosition1 - pos.xyz);
-			
-			float costheta1 = dot(i1, pos1);
-			
-			vec3 r1 = normalize(2.0 * costheta1 * pos1.xyz - i1);
-			vec3 view = normalize(vec3(0.0, 0.0, 0.0) - pos.xyz);
-			
-			vec3 Ra1, Rd1, Rs1;
-
-			Ra1.r = ambient.r * Ia_pp0.r;
-			Ra1.g = ambient.g * Ia_pp0.g;
-			Ra1.b = ambient.b * Ia_pp0.b;
-			
-			Rd1.r = diffuse.r * Id_pp0.r * max(costheta1, 0.0);
-			Rd1.g = diffuse.g * Id_pp0.g * max(costheta1, 0.0);
-			Rd1.b = diffuse.b * Id_pp0.b * max(costheta1, 0.0);
-			
-			float cosphi1 = dot(r1, view);
-			float shine = pow(max(cosphi1, 0.0), shininess);
-			float costhetag01 = floor(0.5 * (sign(costheta1)+1.0));
-
-			Rs1.r = specular.r * Is_pp0.r * shine * costhetag01;
-			Rs1.g = specular.g * Is_pp0.g * shine * costhetag01;
-			Rs1.b = specular.b * Is_pp0.b * shine * costhetag01;
-			
-			vec3 i2 = normalize(lightPosition2 - pos.xyz);
-			float costheta2 = dot(i2, pos1);					
-			vec3 r2 = normalize(2.0 * costheta2 * pos1.xyz - i2);
-			
-			vec3 Ra2, Rd2, Rs2;
-			
-			Ra2.r = ambient.r * Ia_pp02.r;
-			Ra2.g = ambient.g * Ia_pp02.g;
-			Ra2.b = ambient.b * Ia_pp02.b;
-			
-			Rd2.r = diffuse.r * Id_pp02.r * max(costheta2, 0.0);
-			Rd2.g = diffuse.g * Id_pp02.g * max(costheta2, 0.0);
-			Rd2.b = diffuse.b * Id_pp02.b * max(costheta2, 0.0);
-			
-			float cosphi2 = dot(r2, view);
-			float shine2 = pow(max(cosphi2, 0.0), shininess);
-			float costhetag02 = floor(0.5 * (sign(costheta2)+1.0));
-			
-			Rs2.r = specular.r * Is_pp02.r * shine2 * costhetag02;
-			Rs2.g = specular.g * Is_pp02.g * shine2 * costhetag02;
-			Rs2.b = specular.b * Is_pp02.b * shine2 * costhetag02;
-			
-			R = clamp(Ra1+Rd1+Rs1 + Ra2+Rd2+Rs2, 0.0, 1.0);
-			
-			trans = mat4
-				(1, 0, 0, 0,
-				0, 1, 0, 0,
-				0, 0, 1, 0,
-				70, 0, -30, 1);
-			
-			rot_y = mat4 
-				(cos(-0.5), 0, -sin(-0.5), 0,
-				0, 1, 0, 0,
-				sin(-0.5), 0, cos(-0.5), 0,
-				0, 0, 0, 1);
-			
-			gl_Position = projection_persp * M * trans * rot_y * vertexPosition; 
-		}
-	</script>
-
-	<script id="vShaderTable" type="x-shader/x-vertex">
-		precision mediump float;
-		attribute vec4 vertexPosition;
-		attribute vec3 vertexNormal;
-		
-		uniform mat4 M;
-		uniform mat4 M_inv_transpose;
-		uniform mat4 projection_persp;				
-		
-		uniform vec3 ambient, diffuse, specular;
-		uniform float shininess;
-		
-		mat4 trans;
-		mat4 rot_y;
-		
-		uniform vec3 lightPosition1, lightAmbient1, lightDiffuse1, lightSpecular1;
-		uniform vec3 lightPosition2, lightAmbient2, lightDiffuse2, lightSpecular2;
-		uniform bool light1, light2;
-
-		varying vec3 R;
-		
-		void main() {
-			gl_PointSize = 1.0;
-			
-			vec3 pos = (M * vertexPosition).xyz;
-
-			vec4 vertexNormal4 = vec4(vertexNormal.x, vertexNormal.y, vertexNormal.z, 1.0);
-			vec3 pos1 = (M_inv_transpose * vertexNormal4).xyz;
-			
-			vec3 Ia_pp0, Id_pp0, Is_pp0;
-			float distance = length(vertexPosition.xyz - lightPosition1);
-			
-			Ia_pp0 = lightAmbient1 / (distance*distance);
-			Id_pp0 = lightDiffuse1 / (distance*distance);
-			Is_pp0 = lightSpecular1 / (distance*distance);
-			
-			vec3 Ia_pp02, Id_pp02, Is_pp02;
-			float distance2 = length(vertexPosition.xyz - lightPosition2);
-			
-			Ia_pp02 = lightAmbient2 / (distance2*distance2);
-			Id_pp02 = lightDiffuse2 / (distance2*distance2);
-			Is_pp02 = lightSpecular2 / (distance2*distance2);
-			
-			vec3 i1 = normalize(lightPosition1 - pos.xyz);
-			
-			float costheta1 = dot(i1, pos1);
-			
-			vec3 r1 = normalize(2.0 * costheta1 * pos1.xyz - i1);
-			vec3 view = normalize(vec3(0.0, 0.0, 0.0) - pos.xyz);
-			
-			vec3 Ra1, Rd1, Rs1;
-
-			Ra1.r = ambient.r * Ia_pp0.r;
-			Ra1.g = ambient.g * Ia_pp0.g;
-			Ra1.b = ambient.b * Ia_pp0.b;
-			
-			Rd1.r = diffuse.r * Id_pp0.r * max(costheta1, 0.0);
-			Rd1.g = diffuse.g * Id_pp0.g * max(costheta1, 0.0);
-			Rd1.b = diffuse.b * Id_pp0.b * max(costheta1, 0.0);
-			
-			float cosphi1 = dot(r1, view);
-			float shine = pow(max(cosphi1, 0.0), shininess);
-			float costhetag01 = floor(0.5 * (sign(costheta1)+1.0));
-
-			Rs1.r = specular.r * Is_pp0.r * shine * costhetag01;
-			Rs1.g = specular.g * Is_pp0.g * shine * costhetag01;
-			Rs1.b = specular.b * Is_pp0.b * shine * costhetag01;
-			
-			vec3 i2 = normalize(lightPosition2 - pos.xyz);
-			float costheta2 = dot(i2, pos1);					
-			vec3 r2 = normalize(2.0 * costheta2 * pos1.xyz - i2);
-			
-			vec3 Ra2, Rd2, Rs2;
-			
-			Ra2.r = ambient.r * Ia_pp02.r;
-			Ra2.g = ambient.g * Ia_pp02.g;
-			Ra2.b = ambient.b * Ia_pp02.b;
-			
-			Rd2.r = diffuse.r * Id_pp02.r * max(costheta2, 0.0);
-			Rd2.g = diffuse.g * Id_pp02.g * max(costheta2, 0.0);
-			Rd2.b = diffuse.b * Id_pp02.b * max(costheta2, 0.0);
-			
-			float cosphi2 = dot(r2, view);
-			float shine2 = pow(max(cosphi2, 0.0), shininess);
-			float costhetag02 = floor(0.5 * (sign(costheta2)+1.0));
-			
-			Rs2.r = specular.r * Is_pp02.r * shine2 * costhetag02;
-			Rs2.g = specular.g * Is_pp02.g * shine2 * costhetag02;
-			Rs2.b = specular.b * Is_pp02.b * shine2 * costhetag02;
-			
-			R = clamp(Ra1+Rd1+Rs1 + Ra2+Rd2+Rs2, 0.0, 1.0);
-			
-			trans = mat4
-				(1, 0, 0, 0,
-				0, 1, 0, 0,
-				0, 0, 1, 0,
-				-10, 0, -30, 1);
-			
-			gl_Position = projection_persp * M * trans * vertexPosition; 
-		}
-	</script>
-
-	<script id="vShaderCrystal" type="x-shader/x-vertex">
-		precision mediump float;
-		attribute vec4 vertexPosition;
-		attribute vec3 vertexNormal;
-		
-		uniform mat4 M;
-		uniform mat4 M_inv_transpose;
-		uniform mat4 projection_persp;				
-		
-		uniform vec3 ambient, diffuse, specular;
-		uniform float shininess;
-		
-		mat4 trans;
-		mat4 rot_y;
-		
-		uniform vec3 lightPosition1, lightAmbient1, lightDiffuse1, lightSpecular1;
-		uniform vec3 lightPosition2, lightAmbient2, lightDiffuse2, lightSpecular2;
-		uniform bool light1, light2;
-
-		varying vec3 R;
-		
-		void main() {
-			gl_PointSize = 1.0;
-			
-			vec3 pos = (M * vertexPosition).xyz;
-
-			vec4 vertexNormal4 = vec4(vertexNormal.x, vertexNormal.y, vertexNormal.z, 1.0);
-			vec3 pos1 = (M_inv_transpose * vertexNormal4).xyz;
-			
-			vec3 Ia_pp0, Id_pp0, Is_pp0;
-			float distance = length(vertexPosition.xyz - lightPosition1);
-			
-			Ia_pp0 = lightAmbient1 / (distance*distance);
-			Id_pp0 = lightDiffuse1 / (distance*distance);
-			Is_pp0 = lightSpecular1 / (distance*distance);
-			
-			vec3 Ia_pp02, Id_pp02, Is_pp02;
-			float distance2 = length(vertexPosition.xyz - lightPosition2);
-			
-			Ia_pp02 = lightAmbient2 / (distance2*distance2);
-			Id_pp02 = lightDiffuse2 / (distance2*distance2);
-			Is_pp02 = lightSpecular2 / (distance2*distance2);
-			
-			vec3 i1 = normalize(lightPosition1 - pos.xyz);
-			
-			float costheta1 = dot(i1, pos1);
-			
-			vec3 r1 = normalize(2.0 * costheta1 * pos1.xyz - i1);
-			vec3 view = normalize(vec3(0.0, 0.0, 0.0) - pos.xyz);
-			
-			vec3 Ra1, Rd1, Rs1;
-
-			Ra1.r = ambient.r * Ia_pp0.r;
-			Ra1.g = ambient.g * Ia_pp0.g;
-			Ra1.b = ambient.b * Ia_pp0.b;
-			
-			Rd1.r = diffuse.r * Id_pp0.r * max(costheta1, 0.0);
-			Rd1.g = diffuse.g * Id_pp0.g * max(costheta1, 0.0);
-			Rd1.b = diffuse.b * Id_pp0.b * max(costheta1, 0.0);
-			
-			float cosphi1 = dot(r1, view);
-			float shine = pow(max(cosphi1, 0.0), shininess);
-			float costhetag01 = floor(0.5 * (sign(costheta1)+1.0));
-
-			Rs1.r = specular.r * Is_pp0.r * shine * costhetag01;
-			Rs1.g = specular.g * Is_pp0.g * shine * costhetag01;
-			Rs1.b = specular.b * Is_pp0.b * shine * costhetag01;
-			
-			vec3 i2 = normalize(lightPosition2 - pos.xyz);
-			float costheta2 = dot(i2, pos1);					
-			vec3 r2 = normalize(2.0 * costheta2 * pos1.xyz - i2);
-			
-			vec3 Ra2, Rd2, Rs2;
-			
-			Ra2.r = ambient.r * Ia_pp02.r;
-			Ra2.g = ambient.g * Ia_pp02.g;
-			Ra2.b = ambient.b * Ia_pp02.b;
-			
-			Rd2.r = diffuse.r * Id_pp02.r * max(costheta2, 0.0);
-			Rd2.g = diffuse.g * Id_pp02.g * max(costheta2, 0.0);
-			Rd2.b = diffuse.b * Id_pp02.b * max(costheta2, 0.0);
-			
-			float cosphi2 = dot(r2, view);
-			float shine2 = pow(max(cosphi2, 0.0), shininess);
-			float costhetag02 = floor(0.5 * (sign(costheta2)+1.0));
-			
-			Rs2.r = specular.r * Is_pp02.r * shine2 * costhetag02;
-			Rs2.g = specular.g * Is_pp02.g * shine2 * costhetag02;
-			Rs2.b = specular.b * Is_pp02.b * shine2 * costhetag02;
-			
-			R = clamp(Ra1+Rd1+Rs1 + Ra2+Rd2+Rs2, 0.0, 1.0);
-			
-			trans = mat4
-				(1, 0, 0, 0,
-				0, 1, 0, 0,
-				0, 0, 1, 0,
-				-10, 50, -30, 1);
-			
-			gl_Position = projection_persp * M * trans * vertexPosition; 
+			gl_Position = projection_persp * M * trans * rot_x * rot_y * rot_z * vertexPosition; 
 		}
 	</script>
 
@@ -442,12 +120,15 @@
 	<script type="text/javascript" src="./objects/chair.js"></script>
 	<script type="text/javascript" src="./objects/cube.js"></script>
 	<script type="text/javascript" src="./objects/tetrahedron.js"></script>
+	
+	<script type="text/javascript" src="./constants.js"></script>
 
 	<script type="text/javascript" src="./WebGL3D/params/ControlParams.js"></script>
 	<script type="text/javascript" src="./WebGL3D/params/TextureParams.js"></script>
 	<script type="text/javascript" src="./WebGL3D/params/ObjectParams.js"></script>
 	<script type="text/javascript" src="./WebGL3D/params/ProjectionParams.js"></script>
 	<script type="text/javascript" src="./WebGL3D/params/LightingParams.js"></script>
+	<script type="text/javascript" src="./WebGL3D/params/TransformationParams.js"></script>
 
 	<script type="text/javascript" src="./WebGL3D/WebGLCamera.js"></script>
 	<script type="text/javascript" src="./WebGL3D/WebGLLight.js"></script>

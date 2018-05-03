@@ -8,14 +8,16 @@ class WebGL3DObject {
    * Create a new WebGL 3D object.
    * @param {WebGLProgram} glProgram The program configured to render.
    * @param {ObjectParams} objParams Required object parameters to render the object.
+   * @param {TransformationParams} transParams Default translation parameters.
    * @param {WebGLCamera} camera The WebGLCamera object configured to render the scene.
    * @param {LightingParams} lightParams The lighting parameters for the object.
    * @param {TextureParams} texParams Optional texture parameters for the object.
    * @param {ControlParams} controlParams Optional paremeters to allow for transformations using keys.
    */
-  constructor(glProgram, objParams, camera, lightParams, texParams, controlParams) {
+  constructor(glProgram, objParams, transParams, camera, lightParams, texParams, controlParams) {
     this.program = glProgram;
     this.object = objParams;
+    this.transformation = transParams;
     this.texture = texParams;
     this.control = controlParams;
     this.camera = camera;
@@ -24,6 +26,10 @@ class WebGL3DObject {
     gl.useProgram(this.program);
 
     this.MUniform = gl.getUniformLocation(this.program, "M");
+    this.MTransUniform = gl.getUniformLocation(this.program, "trans");
+    this.MRotXUniform = gl.getUniformLocation(this.program, "rot_x");
+    this.MRotYUniform = gl.getUniformLocation(this.program, "rot_y");
+    this.MRotZUniform = gl.getUniformLocation(this.program, "rot_z");
     this.projection_persp = gl.getUniformLocation(this.program, "projection_persp");
     this.MInvTransUniform = gl.getUniformLocation(this.program, "M_inv_transpose");
     this.vertexNormal = gl.getAttribLocation(this.program, "vertexNormal");
@@ -36,9 +42,38 @@ class WebGL3DObject {
    */
   draw(lights) {
     gl.useProgram(this.program);
+
+    const trans = [
+      1, 0, 0, 0,
+      0, 1, 0, 0,
+      0, 0, 1, 0,
+      this.transformation.tx, this.transformation.ty, this.transformation.tz, 1
+    ];
+    const yRot = [
+      Math.cos(this.transformation.beta), 0, -Math.sin(this.transformation.beta), 0,
+      0, 1, 0, 0,
+      Math.sin(this.transformation.beta), 0, Math.cos(this.transformation.beta), 0,
+      0, 0, 0, 1
+    ];
+    const xRot = [
+      1, 0, 0, 0,
+      0, Math.cos(this.transformation.alpha), -Math.sin(this.transformation.alpha), 0,
+      0, Math.sin(this.transformation.alpha), Math.cos(this.transformation.alpha), 0,
+      0, 0, 0, 1
+    ];
+    const zRot = [
+      Math.cos(this.transformation.gamma), -Math.sin(this.transformation.gamma), 0, 0,
+      Math.sin(this.transformation.gamma), Math.cos(this.transformation.gamma), 0, 0,
+      0, 0, 1, 0,
+      0, 0, 0, 1
+    ];
     
     gl.uniformMatrix4fv(this.MUniform, false, flatten(this.camera.M));
     gl.uniformMatrix4fv(this.projection_persp, false, flatten(this.camera.PPersp));
+    gl.uniformMatrix4fv(this.MTransUniform, false, flatten(trans));
+    gl.uniformMatrix4fv(this.MRotXUniform, false, flatten(xRot));
+    gl.uniformMatrix4fv(this.MRotYUniform, false, flatten(yRot));
+    gl.uniformMatrix4fv(this.MRotZUniform, false, flatten(zRot));
 
     const normalsBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, normalsBuffer);
