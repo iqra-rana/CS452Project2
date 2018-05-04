@@ -1,6 +1,7 @@
 class ProjectionParams {
   /**
-   * 
+   * Create an abject containing the perspective
+   * projection parameters.
    * @param {number} left 
    * @param {number} right 
    * @param {number} top 

@@ -1,6 +1,7 @@
 class TransformationParams {
   /**
-   * 
+   * Create an object with details about the object's
+   * x, y, and z translations and rotations.
    * @param {*} tx 
    * @param {*} ty 
    * @param {*} tz 

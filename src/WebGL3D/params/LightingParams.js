@@ -1,6 +1,7 @@
 class LightingParams {
   /**
-   * 
+   * Create an object containing the object's 
+   * lighting coeficients.
    * @param {*} ambient 
    * @param {*} diffuse 
    * @param {*} specular 

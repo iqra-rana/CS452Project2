@@ -1,6 +1,7 @@
 class TextureParams {
   /**
-   * 
+   * Create an object containing details required to render
+   * a texture.
    * @param {*} textureCoords 
    * @param {*} texture 
    * @param {*} textureSize 
