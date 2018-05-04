@@ -172,10 +172,63 @@
 	<script type="text/javascript" src="./project2.js"></script>
 </head>
 
-<body onload="initGL()">
+<body onload="initGL()" onkeydown="transformObject(event)" style="overflow: hidden;">
 	<canvas id="gl-canvas" height="512" width="512"></canvas>
 	<img id="woodImg" src="./img/wood.jpg" hidden></img>
 	<img id="gemImg" src="./img/gem.png" hidden></img>
+
+	<br />
+	<br />
+	<form name="selectObjectForm">
+		<h3>Select an Object: </h3>
+		<p>
+			<i>After selecting an object, click the canvas.</i>
+		</p>
+		<div style="margin-left: 20px;">
+			<label>
+				<input type="radio" name="objectSelect" onclick="selectObject(this);" value="chair1" checked>Green Chair</label>
+			<br />
+			<label>
+				<input type="radio" name="objectSelect" onclick="selectObject(this);" value="chair2">Yellow Chair</label>
+			<br />
+			<label>
+				<input type="radio" name="objectSelect" onclick="selectObject(this);" value="table">Table</label>
+			<br />
+			<label>
+				<input type="radio" name="objectSelect" onclick="selectObject(this);" value="crystal">Crystal</label>
+		</div>
+		<br />
+		<button type="button" onclick="resetObjs()">Reset All Objects</button>
+	</form>
+
+	<div style="position: relative; bottom: 750px; left: 520px;">
+		<h3>Controls: </h3>
+		<div style="margin-left: 20px;">
+			<label>Translations</label>
+			<ul>
+				<li>
+					<strong>A</strong> - Left</li>
+				<li>
+					<strong>D</strong> - Right</li>
+				<li>
+					<strong>W</strong> - Forward (into scene)</li>
+				<li>
+					<strong>S</strong> - Back (toward screen)</li>
+			</ul>
+
+			<label>Rotations</label>
+			<ul>
+				<li>
+					<strong>UpArrow</strong> - Positive X</li>
+				<li>
+					<strong>DownArrow</strong> - Negative X</li>
+				<li>
+					<strong>RightArrow</strong> - Positive Y</li>
+				<li>
+					<strong>LeftArrow</strong> - Negative Y</li>
+			</ul>
+		</div>
+	</div>
 </body>
 
 </html>

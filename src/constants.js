@@ -18,6 +18,11 @@ const DIFFUSE = vec3(0.5, 0.9, 0.36);
 const SHININESS = 20.0;
 const SPECULAR = vec3(0.8, 0.8, 0.8);
 
+const DIFFUSE2 = vec3(0.9, 0.9, 0.36);
+
+const ROTATE_AMOUNT = .1;
+const TRANS_AMOUNT = .5;
+
 // light 1 constants
 const LIGHT_1_POS = vec3(0.0, 0.0, 0.6);
 const LIGHT_1_AMB = vec3(0.1, 0.1, 0.1);
