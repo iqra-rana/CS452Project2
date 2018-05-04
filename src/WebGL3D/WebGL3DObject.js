@@ -12,14 +12,12 @@ class WebGL3DObject {
    * @param {WebGLCamera} camera The WebGLCamera object configured to render the scene.
    * @param {LightingParams} lightParams The lighting parameters for the object.
    * @param {TextureParams} texParams Optional texture parameters for the object.
-   * @param {ControlParams} controlParams Optional paremeters to allow for transformations using keys.
    */
-  constructor(glProgram, objParams, transParams, camera, lightParams, texParams, controlParams) {
+  constructor(glProgram, objParams, transParams, camera, lightParams, texParams) {
     this.program = glProgram;
     this.object = objParams;
     this.transformation = transParams;
     this.texture = texParams;
-    this.control = controlParams;
     this.camera = camera;
     this.light = lightParams;
 

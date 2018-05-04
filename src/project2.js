@@ -60,10 +60,10 @@ function initGL() {
     const lightParams = new LightingParams(AMBIENT, DIFFUSE, SPECULAR, SHININESS);
     const lightParams2 = new LightingParams(AMBIENT, DIFFUSE2, SPECULAR, SHININESS);
 
-    chair1 = new WebGL3DObject(program, chairObjParams, chair1TransParams, camera, lightParams, null, null);
-    chair2 = new WebGL3DObject(program, chairObjParams, chair2TransParams, camera, lightParams2, null, null);
-    table = new WebGL3DObject(textureProgram, tableObjParams, tableTransParams, camera, lightParams, tableTexture, null);
-    crystal = new WebGL3DObject(textureProgram, crystalObjParams, crystalTransParams, camera, lightParams, crystalTexture, null);
+    chair1 = new WebGL3DObject(program, chairObjParams, chair1TransParams, camera, lightParams, null);
+    chair2 = new WebGL3DObject(program, chairObjParams, chair2TransParams, camera, lightParams2, null);
+    table = new WebGL3DObject(textureProgram, tableObjParams, tableTransParams, camera, lightParams, tableTexture);
+    crystal = new WebGL3DObject(textureProgram, crystalObjParams, crystalTransParams, camera, lightParams, crystalTexture);
 
     objects = [chair1, chair2, table, crystal];
     selectedObject = chair1;
