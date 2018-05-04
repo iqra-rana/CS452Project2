@@ -23,6 +23,8 @@ class WebGL3DObject {
     this.camera = camera;
     this.light = lightParams;
 
+    this.useTexture = false;
+
     gl.useProgram(this.program);
 
     this.MUniform = gl.getUniformLocation(this.program, "M");
@@ -31,9 +33,29 @@ class WebGL3DObject {
     this.MRotYUniform = gl.getUniformLocation(this.program, "rot_y");
     this.MRotZUniform = gl.getUniformLocation(this.program, "rot_z");
     this.projection_persp = gl.getUniformLocation(this.program, "projection_persp");
-    this.MInvTransUniform = gl.getUniformLocation(this.program, "M_inv_transpose");
-    this.vertexNormal = gl.getAttribLocation(this.program, "vertexNormal");
     this.vertexPosition = gl.getAttribLocation(this.program, "vertexPosition");
+
+    if (this.texture) {
+      this.useTexture = true;
+
+      this.Tbuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.Tbuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, flatten(this.texture.textureCoords), gl.STATIC_DRAW);
+
+      this.Tpointer = gl.getAttribLocation(this.program, "textureCoords");
+      gl.vertexAttribPointer(this.Tpointer, 2, gl.FLOAT, false, 0, 0);
+      gl.enableVertexAttribArray(this.Tpointer);
+
+      this.textureChecker = gl.createTexture();
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, this.textureChecker);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this.texture.texture);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    } else {
+      this.MInvTransUniform = gl.getUniformLocation(this.program, "M_inv_transpose");
+      this.vertexNormal = gl.getAttribLocation(this.program, "vertexNormal");
+    }
   }
 
   /**
@@ -42,6 +64,22 @@ class WebGL3DObject {
    */
   draw(lights) {
     gl.useProgram(this.program);
+
+    if (this.useTexture) {
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.Tbuffer);
+      gl.vertexAttribPointer(this.Tpointer, 2, gl.FLOAT, false, 0, 0);
+      gl.enableVertexAttribArray(this.Tpointer);
+
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, this.textureChecker);
+    } else {
+      const normalsBuffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, normalsBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, flatten(this.object.vertexNormals), gl.STATIC_DRAW);
+
+      gl.vertexAttribPointer(this.vertexNormal, 3, gl.FLOAT, false, 0, 0);
+      gl.enableVertexAttribArray(this.vertexNormal);
+    }
 
     const trans = [
       1, 0, 0, 0,
@@ -67,20 +105,13 @@ class WebGL3DObject {
       0, 0, 1, 0,
       0, 0, 0, 1
     ];
-    
+
     gl.uniformMatrix4fv(this.MUniform, false, flatten(this.camera.M));
     gl.uniformMatrix4fv(this.projection_persp, false, flatten(this.camera.PPersp));
     gl.uniformMatrix4fv(this.MTransUniform, false, flatten(trans));
     gl.uniformMatrix4fv(this.MRotXUniform, false, flatten(xRot));
     gl.uniformMatrix4fv(this.MRotYUniform, false, flatten(yRot));
     gl.uniformMatrix4fv(this.MRotZUniform, false, flatten(zRot));
-
-    const normalsBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, normalsBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(this.object.vertexNormals), gl.STATIC_DRAW);
-
-    gl.vertexAttribPointer(this.vertexNormal, 3, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(this.vertexNormal);
 
     const indexBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);

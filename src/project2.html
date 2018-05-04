@@ -6,7 +6,7 @@
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
 	<title>Project 2</title>
 
-	<script id="vShaderChair" type="x-shader/x-vertex">
+	<script id="vShader" type="x-shader/x-vertex">
 		precision mediump float;
 		attribute vec4 vertexPosition;
 		attribute vec3 vertexNormal;
@@ -25,7 +25,6 @@
 		
 		uniform vec3 lightPosition1, lightAmbient1, lightDiffuse1, lightSpecular1;
 		uniform vec3 lightPosition2, lightAmbient2, lightDiffuse2, lightSpecular2;
-		uniform bool light1, light2;
 
 		varying vec3 R;
 		
@@ -104,12 +103,48 @@
 		}
 	</script>
 
+	<script id="vShaderTextured" type="x-shader/x-vertex">
+		precision mediump float;
+		attribute vec4 vertexPosition;
+
+		attribute vec2 textureCoords;
+		varying vec2 fTextureCoords;
+		
+		uniform mat4 M;
+		uniform mat4 projection_persp;
+		
+		uniform mat4 trans;
+		uniform mat4 rot_x;
+		uniform mat4 rot_y;
+		uniform mat4 rot_z;
+
+		varying vec3 R;
+		
+		void main() {
+			gl_PointSize = 1.0;
+			
+			gl_Position = projection_persp * M * trans * rot_x * rot_y * rot_z * vertexPosition;
+			fTextureCoords = textureCoords;
+		}
+	</script>
+
 	<script id="fShader" type="x-shader/x-fragment">
 		precision mediump float;
-		varying vec3 R;		
+		varying vec3 R;
 		
 		void main() {
 			gl_FragColor = vec4( R.r, R.g, R.b, 1.0 );
+		}
+	</script>
+
+	<script id="fShaderTextured" type="x-shader/x-fragment">
+		precision mediump float;
+		uniform sampler2D texMap0;
+		varying vec2 fTextureCoords;
+		
+		void main() {
+			vec4 color = texture2D(texMap0, fTextureCoords);
+			gl_FragColor = vec4(color.r, color.g, color.b, 1.0);
 		}
 	</script>
 
@@ -120,7 +155,7 @@
 	<script type="text/javascript" src="./objects/chair.js"></script>
 	<script type="text/javascript" src="./objects/cube.js"></script>
 	<script type="text/javascript" src="./objects/tetrahedron.js"></script>
-	
+
 	<script type="text/javascript" src="./constants.js"></script>
 
 	<script type="text/javascript" src="./WebGL3D/params/ControlParams.js"></script>
@@ -139,6 +174,8 @@
 
 <body onload="initGL()">
 	<canvas id="gl-canvas" height="512" width="512"></canvas>
+	<img id="woodImg" src="./img/wood.jpg" hidden></img>
+	<img id="gemImg" src="./img/gem.png" hidden></img>
 </body>
 
 </html>

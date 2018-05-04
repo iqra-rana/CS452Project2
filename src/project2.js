@@ -34,24 +34,32 @@ function initGL() {
     lights = [light1, light2];
 
     // create shader program
-    const program = initShaders(gl, "vShaderChair", "fShader");
+    const program = initShaders(gl, "vShader", "fShader");
+    const textureProgram = initShaders(gl, "vShaderTextured", "fShaderTextured");
+
+    // setup textures
+    const woodImg = document.getElementById("woodImg");
+    const gemImg = document.getElementById("gemImg");
+
+    const tableTexture = new TextureParams(TABLE_TEXTURE_COORDS, woodImg, 256);
+    const crystalTexture = new TextureParams(CRYSTAL_TEXTURE_COORDS, gemImg, 256);
 
     // create objects
     const chairObjParams = new ObjectParams(CHAIR_TRIANGLES_NUM, CHAIR_VERTICES, CHAIR_INDEXLIST);
     const tableObjParams = new ObjectParams(TABLE_TRIANGLES_NUM, TABLE_VERTICES, TABLE_INDEXLIST);
     const crystalObjParams = new ObjectParams(CRYSTAL_TRIANGLES_NUM, CRYSTAL_VERTICES, CRYSTAL_INDEXLIST);
-    
-    const chair1TransParams = new TransformationParams(-100, 0, 0, 0, -5, 0);
-    const chair2TransParams = new TransformationParams(70, 0, -30, 0, -.5, 0);
-    const tableTransParams = new TransformationParams(-10, 0, -30, 0, 0, 0);
-    const crystalTransParams = new TransformationParams(-10, 50, -30, 0, 0, 0);
+
+    const chair1TransParams = new TransformationParams(-70, 0, 22, 0, 1, 0);
+    const chair2TransParams = new TransformationParams(60, 0, 0, 0, -.8, 0);
+    const tableTransParams = new TransformationParams(-4, 0, 0, 0, .2, 0);
+    const crystalTransParams = new TransformationParams(-1, 30, 20, 12, 12, 0);
 
     const lightParams = new LightingParams(AMBIENT, DIFFUSE, SPECULAR, SHININESS);
 
     chair1 = new WebGL3DObject(program, chairObjParams, chair1TransParams, camera, lightParams, null, null);
     chair2 = new WebGL3DObject(program, chairObjParams, chair2TransParams, camera, lightParams, null, null);
-    table = new WebGL3DObject(program, tableObjParams, tableTransParams, camera, lightParams, null, null);
-	crystal = new WebGL3DObject(program, crystalObjParams, crystalTransParams, camera, lightParams, null, null);
+    table = new WebGL3DObject(textureProgram, tableObjParams, tableTransParams, camera, lightParams, tableTexture, null);
+    crystal = new WebGL3DObject(textureProgram, crystalObjParams, crystalTransParams, camera, lightParams, crystalTexture, null);
 
     // begin rendering 
     render();
@@ -66,7 +74,7 @@ function render() {
     chair1.draw(lights);
     chair2.draw(lights);
     table.draw(lights);
-	crystal.draw(lights);
+    crystal.draw(lights);
 
     requestAnimFrame(render);
 };

@@ -6,7 +6,7 @@ class TextureParams {
    * @param {*} textureSize 
    */
   constructor(textureCoords, texture, textureSize) {
-    this.texttureCoords = this.texttureCoords;
+    this.textureCoords = textureCoords;
     this.texture = texture;
     this.textureSize = textureSize;
   }

@@ -6,10 +6,12 @@ const CHAIR_VERTICES = getChairVertices();
 const TABLE_TRIANGLES_NUM = 12;
 const TABLE_INDEXLIST = getTableFaces();
 const TABLE_VERTICES = getTableVertices();
+const TABLE_TEXTURE_COORDS = getTableTexCoords();
 
 const CRYSTAL_TRIANGLES_NUM = 4;
 const CRYSTAL_INDEXLIST = getTetrahedronFaces();
 const CRYSTAL_VERTICES = getTetrahedronVertices();
+const CRYSTAL_TEXTURE_COORDS = getTetrahedronTexCoords();
 
 const AMBIENT = vec3(0.5, 0.77, 0.6);
 const DIFFUSE = vec3(0.5, 0.9, 0.36);
@@ -32,7 +34,7 @@ const LIGHT_2_SPEC = vec3(1.0, 0.77, 1.0);
 const PROJ_LEFT = -100.0;
 const PROJ_RIGHT = 100.0;
 const PROJ_TOP = 110.0;
-const PROJ_BOTTOM = -110.0; 
+const PROJ_BOTTOM = -110.0;
 const PROJ_NEAR = 100.0;
 const PROJ_FAR = 250.0;
 
