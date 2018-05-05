@@ -1,4 +1,9 @@
 /**
+  * Iqra Rana, Jackson DeMeyers, Matthew Michaels
+  * 5/8/2018
+  */
+ 
+/**
  * WebGL 3D Object with a textures, transformation controls, a camera and lighting.
  * Render the shape through the camera using the lookat approach and perspective 
  * projection.

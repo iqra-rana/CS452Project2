@@ -1,5 +1,7 @@
-// Iqra Rana, 4/10/2018
-// Jackson DeMeyers, 4/30/2018
+/**
+  * Iqra Rana, Jackson DeMeyers, Matthew Michaels
+  * 5/8/2018
+  */
 
 let gl;
 

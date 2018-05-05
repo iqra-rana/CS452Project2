@@ -1,3 +1,8 @@
+/**
+  * Iqra Rana, Jackson DeMeyers, Matthew Michaels
+  * 5/8/2018
+  */
+ 
 class LightingParams {
   /**
    * Create an object containing the object's 

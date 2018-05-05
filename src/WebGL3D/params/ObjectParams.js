@@ -1,3 +1,8 @@
+/**
+  * Iqra Rana, Jackson DeMeyers, Matthew Michaels
+  * 5/8/2018
+  */
+  
 class ObjectParams {
   /**
    * Create an object containing the details required

@@ -1,3 +1,7 @@
+/**
+  * Iqra Rana, Jackson DeMeyers, Matthew Michaels
+  * 5/8/2018
+  */
 function getTableVertices() {
   cubeVertices = [
     vec4(-20, -20, 40, 1),

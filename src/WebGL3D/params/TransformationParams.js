@@ -1,3 +1,8 @@
+/**
+  * Iqra Rana, Jackson DeMeyers, Matthew Michaels
+  * 5/8/2018
+  */
+ 
 class TransformationParams {
   /**
    * Create an object with details about the object's

@@ -1,3 +1,7 @@
+/**
+  * Iqra Rana, Jackson DeMeyers, Matthew Michaels
+  * 5/8/2018
+  */
 // objects constants
 const CHAIR_TRIANGLES_NUM = 4871;
 const CHAIR_INDEXLIST = getChairFaces();

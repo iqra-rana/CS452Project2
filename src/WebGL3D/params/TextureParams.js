@@ -1,3 +1,8 @@
+/**
+  * Iqra Rana, Jackson DeMeyers, Matthew Michaels
+  * 5/8/2018
+  */
+ 
 class TextureParams {
   /**
    * Create an object containing details required to render

@@ -1,4 +1,9 @@
 /**
+  * Iqra Rana, Jackson DeMeyers, Matthew Michaels
+  * 5/8/2018
+  */
+  
+/**
  * Simple WebGL Light.
  * Sends ambient, diffuse, specular, and position data to the the gpu to render in 
  * the shaders.

@@ -1,4 +1,9 @@
 /**
+  * Iqra Rana, Jackson DeMeyers, Matthew Michaels
+  * 5/8/2018
+  */
+  
+/**
  * Simple WebGL Camera using the lookat approach and perspective projection.
  * Provide access to ModelView matrix (M), ModelView Inverse Transpose matrix
  * (MInvTrans), and the perspective projection matrix (PPersp).

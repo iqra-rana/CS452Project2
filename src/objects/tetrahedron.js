@@ -1,3 +1,7 @@
+/**
+  * Iqra Rana, Jackson DeMeyers, Matthew Michaels
+  * 5/8/2018
+  */
 function getTetrahedronTexCoords() {
   return [
     0, 0,
