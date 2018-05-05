@@ -1,6 +1,6 @@
 # Project 2: INTERACTING OBJECTS
-** Iqra Rana, Jackson DeMeyers, Matthew Michaels **
-** 5/8/2018 **
+**Iqra Rana, Jackson DeMeyers, Matthew Michaels**
+**5/8/2018**
 
 #### DESCRIPTION
 	This project displays a wooden table, two chairs on its either side and a crystal on top of it. The chairs are specular illuminated in green and yellow lights and the crystal is red textured. All the objects, one at a time, can be translated and rotated in four directions. Translation takes place in left, right, forward (into the scene) and backward (away from the scene) directions. Rotation takes place in positive x and y; and negative x and y directions.
