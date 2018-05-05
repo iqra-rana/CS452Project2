@@ -1,12 +1,14 @@
 # Project 2: INTERACTING OBJECTS
 ### Iqra Rana, Jackson DeMeyers, Matthew Michaels
-#### 5/8/2018
+###5/8/2018
 
-DESCRIPTION:
+####DESCRIPTION
+	
 	This project displays a wooden table, two chairs on its either side and a crystal on top of it. The chairs are specular illuminated in green and yellow lights and the crystal is red textured. All the objects, one at a time, can be translated and rotated in four directions. Translation takes place in left, right, forward (into the scene) and backward (away from the scene) directions. Rotation takes place in positive x and y; and negative x and y directions.
 
 
-CONTROLS:
+####CONTROLS
+	
 	After an object is selected, it can be transformed using following controls
 
 	* Translations
@@ -22,7 +24,8 @@ CONTROLS:
 		LeftArrow - Negative Y
 
 
-IMPLEMENTATION:
+####IMPLEMENTATION
+	
 	The source code is divided into three main groups: objects, WebGL3D and main html and js files.
 	
 	1. objects: This group defines three distinct objects of the scene: chair, cube (table) and tetrahedron (crystal). Each of the js files return vertices and faces (indexList), cube and tetrahedron return their respective textured coordinates as well.
