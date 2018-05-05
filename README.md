@@ -24,6 +24,7 @@ CONTROLS:
 
 IMPLEMENTATION:
 	The source code is divided into three main groups: objects, WebGL3D and main html and js files.
+	
 	1. objects: This group defines three distinct objects of the scene: chair, cube (table) and tetrahedron (crystal). Each of the js files return vertices and faces (indexList), cube and tetrahedron return their respective textured coordinates as well.
 	
 	2. WebGL3D: This group defines classes WebGLCamera, WebGLLight, WebGL3DObject and another sub-group called params. 
